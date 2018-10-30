@@ -1,0 +1,19 @@
+{
+  "name": "status.osweekends.com",
+  "version": "1.0.0",
+  "description": "Status de nuestros proyectos y servicios Online",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OSWeekends/status.osweekends.com.git"
+  },
+  "author": "Open Source Weekends",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OSWeekends/status.osweekends.com/issues"
+  },
+  "homepage": "https://github.com/OSWeekends/status.osweekends.com#readme"
+}
