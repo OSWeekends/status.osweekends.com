@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OSWeekends/status.osweekends.com/issues"
   },
-  "homepage": "https://github.com/OSWeekends/status.osweekends.com#readme"
+  "homepage": "https://github.com/OSWeekends/status.osweekends.com#readme",
+  "dependencies": {
+    "winston": "^3.1.0"
+  }
 }
