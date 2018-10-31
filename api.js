@@ -1,15 +1,16 @@
 const config = require('./config');
 const request = require("request");
 
-function icingaRequest (path="", method="GET") {
+function icingaRequest (urlPath="", method="GET") {
     return new Promise(function(resolve, reject){
-        request(config.server + path, {
+        const url = config.icinga_server.server + urlPath;
+        request(url, {
           method,
           auth: {
-            user: config.user,
-            pass: config.pass
+            user: config.icinga_server.user,
+            pass: config.icinga_server.pass
           }
-        }, function (error, response, body) {
+        }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
               resolve({response, body});
             } else {
