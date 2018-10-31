@@ -1,8 +1,9 @@
 const path = require('path'),
     express = require("express"),
     helmet = require("helmet"),
+    api = require('./api'),
     utils = require('./utils'),
-    config = require('./config')
+    config = require('./config'),
     logger = require('./logger');
 
 const app = express();
@@ -20,11 +21,21 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/v1/host', [utils.enableCors], (req, res) => {
-    logger.info(`[GET] API /host`);
+    api.allHosts()
+        .then(data => res.status(200).json(data))
+        .catch(err => {
+            res.status(500).send();
+            logger.error(err);
+        });
 });
 
 app.get('/api/v1/host/:host', [utils.enableCors], (req, res) => {
-    logger.info(`[GET] API /host/${req.params.host}`);
+    api.hostDetails(req.params.host)
+        .then(data => res.status(200).json(data))
+        .catch(err => {
+            res.status(500).send();
+            logger.error(err);
+        });
 });
 
 app.listen(config.port, () => {
