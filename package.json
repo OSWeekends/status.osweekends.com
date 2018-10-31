@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/OSWeekends/status.osweekends.com#readme",
   "dependencies": {
+    "express": "^4.16.4",
+    "helmet": "^3.14.0",
     "winston": "^3.1.0"
   }
 }
