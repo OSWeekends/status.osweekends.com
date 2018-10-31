@@ -2,6 +2,7 @@ const path = require('path'),
     express = require("express"),
     helmet = require("helmet"),
     utils = require('./utils'),
+    config = require('./config')
     logger = require('./logger');
 
 const app = express();
@@ -26,6 +27,6 @@ app.get('/api/v1/host/:host', [utils.enableCors], (req, res) => {
     logger.info(`[GET] API /host/${req.params.host}`);
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    logger.info('status.osweekends.com running on port', process.env.PORT || 3000);
+app.listen(config.port, () => {
+    logger.info('status.osweekends.com running on port', config.port);
 });
