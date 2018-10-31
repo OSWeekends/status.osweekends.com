@@ -1,6 +1,7 @@
 const path = require('path'),
     express = require("express"),
     helmet = require("helmet"),
+    utils = require('./utils'),
     logger = require('./logger');
 
 const app = express();
@@ -17,11 +18,11 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get('/api/v1/host', (req, res) => {
+app.get('/api/v1/host', [utils.enableCors], (req, res) => {
     logger.info(`[GET] API /host`);
 });
 
-app.get('/api/v1/host/:host', (req, res) => {
+app.get('/api/v1/host/:host', [utils.enableCors], (req, res) => {
     logger.info(`[GET] API /host/${req.params.host}`);
 });
 
