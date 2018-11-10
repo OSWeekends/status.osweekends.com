@@ -79,6 +79,7 @@ code {
 }
 
 #error-data {
+  display: none;
   margin-top: 60px;
 }
 
