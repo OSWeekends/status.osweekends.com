@@ -17,7 +17,7 @@ function icingaRequest (urlPath="", method="GET") {
               reject({error, response});
             }
         });
-    })
+    });
 }
 
 function stateMapping (code) {
@@ -35,12 +35,12 @@ function stateMapping (code) {
 
 function outputMapping (output){
     const data = output.split(" ");
-    return {raw: output, ping: data[1], packet_loss: data[6], rta_ms: data[9]}
+    return {raw: output, ping: data[1], packet_loss: data[6], rta_ms: data[9]};
 }
 
 function filterDetails (hostDetails) {
     return {
-        name: hostDetails.name,
+        name: hostDetails.attrs.display_name,
         type: hostDetails.type,
         severity: hostDetails.attrs.severity,
         next_check: hostDetails.attrs.next_check,
@@ -49,31 +49,47 @@ function filterDetails (hostDetails) {
         last_state_down: hostDetails.attrs.last_state_down,
         output: outputMapping(hostDetails.attrs.last_check_result.output),
         state: stateMapping(hostDetails.attrs.last_check_result.state),
-        isActive: hostDetails.attrs.last_check_result.active,
-    }
+        isActive: hostDetails.attrs.last_check_result.active
+    };
 }
 
 function allHosts () {
     return new Promise ((resolve, reject) => {
         icingaRequest('/objects/hosts')
             .then((res, body) => {
-                const data = JSON.parse(res.body)
-                resolve(data.results.map(filterDetails))
+                const data = JSON.parse(res.body);
+                resolve(data.results.map(filterDetails));
             })
-            .catch(reject)
-    })
+            .catch(reject);
+    });
 }
 
 function hostDetails (host) {
     return new Promise ((resolve, reject) => {
         icingaRequest(`/objects/hosts?host=${host}`)
             .then((res, body) => {
-                const data = JSON.parse(res.body)
-                resolve(data.results.map(filterDetails)[0])
+                const data = JSON.parse(res.body);
+                resolve(data.results.map(filterDetails)[0]);
             })
-            .catch(reject)
-    })
+            .catch(reject);
+    });
 }
 
+function allGroups () {
+    return new Promise ((resolve, reject) => {
+        icingaRequest('/objects/services')
+            .then((res, body) => {
+                const finalData = {};
+                const data = JSON.parse(res.body);
+                data.results.forEach(item => {
+                    const service = item.name.split("!")[0];
+                    finalData[service] = finalData[service] || [];
+                    finalData[service].push(filterDetails(item));
+                });
+                resolve(finalData);
+            })
+            .catch(reject);
+    });
+}
 
-module.exports = {allHosts, hostDetails}
+module.exports = {allHosts, hostDetails, allGroups};

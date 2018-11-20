@@ -25,7 +25,7 @@ app.get('/api/v1/host', [utils.enableCors], (req, res) => {
         .then(data => res.status(200).json(data))
         .catch(err => {
             res.status(500).send();
-            logger.error(err);
+            logger.error(JSON.parse(err));
         });
 });
 
@@ -34,7 +34,16 @@ app.get('/api/v1/host/:host', [utils.enableCors], (req, res) => {
         .then(data => res.status(200).json(data))
         .catch(err => {
             res.status(500).send();
-            logger.error(err);
+            logger.error(JSON.parse(err));
+        });
+});
+
+app.get('/api/v1/group', [utils.enableCors], (req, res) => {
+    api.allGroups()
+        .then(data => res.status(200).json(data))
+        .catch(err => {
+            res.status(500).send();
+            logger.error(JSON.parse(err));
         });
 });
 
