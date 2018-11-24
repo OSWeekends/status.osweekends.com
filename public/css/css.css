@@ -86,3 +86,7 @@ code {
 #error-data img {
   max-height: 20rem;
 }
+
+.collapse-icon {
+  color:#333;
+}
