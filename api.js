@@ -35,21 +35,27 @@ function stateMapping (code) {
 
 function outputMapping (output){
     const data = output.split(" ");
-    return {raw: output, ping: data[1], packet_loss: data[6], rta_ms: data[9]};
+    if(data[0] === "PING") {
+        return {raw: output, ping: data[1], rta_ms: data[9]};
+    } else if (data[0] === "HTTP") {
+        return {raw: output, ping: data[1], rta_ms: data[data.length-5]*1000 };
+    } else {
+        return {raw: output, ping: "OK", rta_ms: 0};
+    }
 }
 
-function filterDetails (hostDetails) {
+function filterDetails (itemDetails) {
     return {
-        name: hostDetails.attrs.display_name,
-        type: hostDetails.type,
-        severity: hostDetails.attrs.severity,
-        next_check: hostDetails.attrs.next_check,
-        last_state_up: hostDetails.attrs.last_state_up,
-        last_state_change: hostDetails.attrs.last_state_change,
-        last_state_down: hostDetails.attrs.last_state_down,
-        output: outputMapping(hostDetails.attrs.last_check_result.output),
-        state: stateMapping(hostDetails.attrs.last_check_result.state),
-        isActive: hostDetails.attrs.last_check_result.active
+        name: itemDetails.attrs.display_name,
+        type: itemDetails.type,
+        severity: itemDetails.attrs.severity,
+        next_check: itemDetails.attrs.next_check,
+        last_state_up: itemDetails.attrs.last_state_up,
+        last_state_change: itemDetails.attrs.last_state_change,
+        last_state_down: itemDetails.attrs.last_state_down,
+        output: outputMapping(itemDetails.attrs.last_check_result.output),
+        state: stateMapping(itemDetails.attrs.last_check_result.state),
+        isActive: itemDetails.attrs.last_check_result.active
     };
 }
 
