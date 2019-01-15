@@ -1,9 +1,9 @@
-(function() {
+(() => {
     
 // Variables
-var errSlctr = document.getElementById("error-data");
-var loadingSlctr = document.getElementById("loading");
-var statusSlctr = document.getElementById("status-data");
+const errSlctr = document.getElementById("error-data");
+const loadingSlctr = document.getElementById("loading");
+const statusSlctr = document.getElementById("status-data");
 
 // Functions
 
@@ -19,11 +19,11 @@ var statusSlctr = document.getElementById("status-data");
  * @param {object|boolean} data - The information/response from the server
  */
 function ajaxHandler(url, cb) {
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = () => {
         if (request.readyState === 4) {
             if (request.status === 200) {
-                var data = JSON.parse(request.responseText);
+                const data = JSON.parse(request.responseText);
                 cb(false, data);
             } else {
                 cb(true, request.status);
@@ -42,7 +42,7 @@ function ajaxHandler(url, cb) {
     function errShow() {
         errSlctr.style.display = "inherit";
         statusSlctr.style.display = "none";
-        hideLoading()
+        hideLoading();
     }
     
 /** 
@@ -72,7 +72,7 @@ function ajaxHandler(url, cb) {
  * @return {string} - the html to be rendered
  */
     function templateItem(item) {
-        var statusDetails = semanticTranslator(item.state.service_state);
+        const statusDetails = semanticTranslator(item.state.service_state);
         return `<li class="list-group-item d-flex justify-content-between align-items-center">
            ${item.name} <span><span class="badge badge-light">${item.output.rta_ms}ms</span> 
            <span class="badge badge-${statusDetails.label}">${statusDetails.text}</span></span>
@@ -85,10 +85,7 @@ function ajaxHandler(url, cb) {
  * @return {string} - the html for the group-items
  */
     function statusItemsDetails(data) {
-        return data.map(function(item) {
-            return templateItem(item);
-        }).join("");
-
+        return data.map(item => templateItem(item)).join("");
     }
 
 /** 
@@ -97,7 +94,7 @@ function ajaxHandler(url, cb) {
  * @return {object} - match key label and text or "Unknown object" by default
  */
     function semanticTranslator(key) {
-        var dic = {
+        const dic = {
             "OK": {
                 label: "success",
                 text: "Operational"
@@ -115,7 +112,7 @@ function ajaxHandler(url, cb) {
                 text: "System Down"
             }
         };
-        var match = dic[key];
+        const match = dic[key];
         return match ? match : dic.Unknown;
     }
     
@@ -126,13 +123,13 @@ function ajaxHandler(url, cb) {
  */
     function criticOrder(labels) {
         if (labels.includes("dark")) {
-            return "danger"
+            return "danger";
         } else if (labels.includes("danger")) {
-            return "danger"
+            return "danger";
         } else if (labels.includes("warning")) {
-            return "warning"
+            return "warning";
         } else {
-            return "success"
+            return "success";
         }
     }
 
@@ -143,10 +140,8 @@ function ajaxHandler(url, cb) {
  * @return {string} - semantic translation for the service state
  */
     function groupStatus(data) {
-        var labels = data.map(function(item) {
-            return semanticTranslator(item.state.service_state).label
-        })
-        return criticOrder(labels)
+        const labels = data.map(item => semanticTranslator(item.state.service_state).label);
+        return criticOrder(labels);
     }
 
 /** 
@@ -156,7 +151,7 @@ function ajaxHandler(url, cb) {
  */    
     function slugGenerator(str) {
         return str.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    };
+    }
 
 /** 
  * Generates the html for the whole list group
@@ -165,7 +160,7 @@ function ajaxHandler(url, cb) {
  * @return {string} - html
  */
     function groupTemplate(data, name) {
-        var collapseRef = `id-${slugGenerator(name)}`;
+        const collapseRef = `id-${slugGenerator(name)}`;
         return `<div class="list col-md-8 mx-auto my-3">
       <ul class="list-group list-group-flash">
         <li class="list-group-item list-group-item-${groupStatus(data)}">
@@ -183,7 +178,7 @@ function ajaxHandler(url, cb) {
         </ul>
       </div>
       </ul>
-    </div>`
+    </div>`;
 
     }
     
@@ -193,11 +188,8 @@ function ajaxHandler(url, cb) {
  * @return {string} - html from the groups' data
  */
     function manageGroups(data) {
-        var groups = Object.keys(data)
-        return groups.map(function(group) {
-            return groupTemplate(data[group], group)
-        }).join("")
-
+        const groups = Object.keys(data);
+        return groups.map(group => groupTemplate(data[group], group)).join("");
     }
 
 /** 
@@ -225,8 +217,8 @@ function ajaxHandler(url, cb) {
     }
 
 
-    ajaxHandler("/api/v1/group", function(err, data) {
+    ajaxHandler("/api/v1/group", (err, data) => {
         err ? errShow() : renderTemplate(data);
         hideLoading();
     });
-})()
+})();
